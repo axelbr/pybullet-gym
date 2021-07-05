@@ -29,8 +29,6 @@ class BaseBulletEnv(gym.Env):
 		self._cam_dist = 3
 		self._cam_yaw = 0
 		self._cam_pitch = -30
-		self._render_width = 320
-		self._render_height = 240
 
 		self.action_space = robot.action_space
 		self.observation_space = robot.observation_space
@@ -70,7 +68,7 @@ class BaseBulletEnv(gym.Env):
 		self.potential = self.robot.calc_potential()
 		return s
 
-	def _render(self, mode, close=False):
+	def _render(self, mode, close=False, width=320, height=240):
 		if mode == "human":
 			self.isRender = True
 		if mode != "rgb_array":
@@ -89,10 +87,10 @@ class BaseBulletEnv(gym.Env):
 			roll=0,
 			upAxisIndex=2)
 		proj_matrix = self._p.computeProjectionMatrixFOV(
-			fov=60, aspect=float(self._render_width)/self._render_height,
+			fov=60, aspect=float(width)/height,
 			nearVal=0.1, farVal=100.0)
 		(_, _, px, _, _) = self._p.getCameraImage(
-		width=self._render_width, height=self._render_height, viewMatrix=view_matrix,
+		width=width, height=height, viewMatrix=view_matrix,
 			projectionMatrix=proj_matrix,
 			renderer=pybullet.ER_BULLET_HARDWARE_OPENGL
 			)
